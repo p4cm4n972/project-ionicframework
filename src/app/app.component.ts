@@ -5,6 +5,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
+import { TablesPage } from '../pages/tables/tables';
+
+import { RestProvider } from '../providers/rest/rest'
 
 @Component({
   templateUrl: 'app.html'
@@ -16,13 +19,14 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public rest: RestProvider) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
+      { title: 'List', component: ListPage },
+      { title: 'Tables', component: TablesPage },
     ];
 
   }
@@ -33,6 +37,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.rest.getTable();
     });
   }
 
