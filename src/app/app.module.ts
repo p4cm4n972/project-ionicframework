@@ -12,10 +12,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { RestProvider } from '../providers/rest/rest';
 import { TablesPage } from '../pages/tables/tables';
 import { AddtablePage } from '../pages/addtable/addtable';
+import { LoginPage } from '../pages/login/login';
 
 @NgModule({
   declarations: [
     MyApp,
+    LoginPage,
     HomePage,
     ListPage,
     TablesPage,
@@ -29,6 +31,7 @@ import { AddtablePage } from '../pages/addtable/addtable';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    LoginPage,
     HomePage,
     ListPage,
     TablesPage,
