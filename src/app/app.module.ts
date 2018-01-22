@@ -13,6 +13,9 @@ import { RestProvider } from '../providers/rest/rest';
 import { TablesPage } from '../pages/tables/tables';
 import { AddtablePage } from '../pages/addtable/addtable';
 import { LoginPage } from '../pages/login/login';
+import { RegisterPage } from '../pages/register/register';
+import { AuthServiceProvider } from '../providers/auth-service/auth-service';
+import { AdminLoginPage } from '../pages/admin-login/admin-login';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,9 @@ import { LoginPage } from '../pages/login/login';
     HomePage,
     ListPage,
     TablesPage,
-    AddtablePage
+    AddtablePage,
+    RegisterPage,
+    AdminLoginPage
   ],
   imports: [
     BrowserModule,
@@ -35,14 +40,17 @@ import { LoginPage } from '../pages/login/login';
     HomePage,
     ListPage,
     TablesPage,
-    AddtablePage
+    AddtablePage,
+    RegisterPage,
+    AdminLoginPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     RestProvider,
-    HttpClientModule
+    HttpClientModule,
+    AuthServiceProvider
   ]
 })
 export class AppModule {}

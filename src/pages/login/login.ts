@@ -1,6 +1,13 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
+import { RestProvider } from '../../providers/rest/rest';
+import { RegisterPage } from '../register/register';
+import { ViewController } from 'ionic-angular/navigation/view-controller';
+import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
+import { TablesPage } from '../tables/tables';
+import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { AdminLoginPage } from '../admin-login/admin-login';
 
 /**
  * Generated class for the LoginPage page.
@@ -16,11 +23,44 @@ import { ModalController } from 'ionic-angular/components/modal/modal-controller
 })
 export class LoginPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController) {
+  public tables;
+  public user;
+  postStatus: any;
+  loginData = { title:'', password:''};
+  loading: any;
+  data: any;
+  title: any;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public rest: RestProvider, public viewController: ViewController, public authService: AuthServiceProvider, private formBuilder: FormBuilder) {
+    this.tables;
+    this.user = this.formBuilder.group({
+      title: ['', Validators.required]
+    })
+    
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
+    this.getTable();
+
   }
+  getTable() {
+    this.rest.getTable()
+    .subscribe(tables => {
+      this.tables = tables;
+    })
+   
+ }
+ openAdmin() {
+   this.viewController.dismiss(LoginPage);
+   let pop = this.modalCtrl.create(AdminLoginPage);
+   pop.present();
+ }
+ doLogin() {
+  this.authService.login(this.loginData), () => {
+    this.navCtrl.setRoot(TablesPage);
+
+  }
+  
+}
 
 }

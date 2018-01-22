@@ -1,43 +1,40 @@
-<ion-header >
+<ion-header>
   <ion-navbar transparent>
-    
-    <ion-title><h2 class="text-center">WELCOME</h2></ion-title>
+    <ion-title text-center>WELCOME</ion-title>
+    <ion-buttons end>
+    <button ion-button icon-only color="royal" (click)="openAdmin()">
+      <ion-icon name="contact"></ion-icon>
+    </button>
+  </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content class="login-content" padding >
+<ion-content class="login-content" padding>
   <div class="login-box">
-    <form (ngSubmit)="login()" #registerForm="ngForm">
+    <form [formGroup]="user" (ngSubmit)="doLogin(user.value)" >
       <ion-row>
         <ion-col>
           <ion-list inset>
-            
             <ion-item>
-              <ion-label>login</ion-label>
-              <ion-select [(ngModel)]="login" name="log">
-              <ion-option value="admin">ADMIN</ion-option>
-              <ion-option value="TABLE1">TABLE 1</ion-option>
-            </ion-select>
+              <ion-label>TABLES</ion-label>
+              <ion-select formControlName="title" name="title">
+                <ion-option *ngFor='let table of tables' [value]="table.title" name='option'>{{table.title}}</ion-option>
+              </ion-select>
             </ion-item>
-            
-            <ion-item>
-              <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="password" required></ion-input>
-            </ion-item>
-            
           </ion-list>
         </ion-col>
       </ion-row>
-      
+
       <ion-row>
         <ion-col class="signup-col">
-          <button ion-button class="submit-btn" full type="submit" [disabled]="!registerForm.form.valid">Login</button>
-          <button ion-button class="register-btn" block clear (click)="createAccount()">Create New Account</button>
+          <button ion-button class="submit-btn" full type="submit" [disabled]="!user.valid">Login</button>
+          
         </ion-col>
       </ion-row>
-      
+
     </form>
   </div>
-  <ion-row class="logo-row" >
+  <ion-row class="logo-row">
     <ion-col></ion-col>
     <ion-col width-67>
       <img src="./assets/imgs/logo.svg">

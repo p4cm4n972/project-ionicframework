@@ -38,6 +38,11 @@ export class RestProvider {
       console.log(res)
     })
   }
+
+  login(user) {
+    return this.http.post('http://localhost/api/login', user)
+    .subscribe();
+  }
   private handleError(error: Response | any) {
     let errMsg: string;
     if (error instanceof Response) {

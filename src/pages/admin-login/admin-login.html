@@ -1,0 +1,34 @@
+<!--
+  Generated template for the AdminLoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar transparent>
+    <ion-title text-center>ADMINISTRATION</ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only color="royal" (click)="return()">
+      <ion-icon name="backspace"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <form [formGroup] = "register" (ngSubmit)="login(register.value)">
+      <ion-item>
+        <ion-label stacked>Username</ion-label>
+        <ion-input formControlName="title" name="title" type="text" placeholder="Your username" ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Password</ion-label>
+        <ion-input formControlName="password" name="password" type="password" placeholder="Your password"></ion-input>
+      </ion-item>
+      
+      <button ion-button class="submit-btn" full type="submit" [disabled]="!register.valid">Login</button>
+    </form>
+  </ion-content>

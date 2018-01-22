@@ -35,6 +35,10 @@ var Table = mongoose.model('Table', {
   description: String,
   rating: Number
 });
+var User = mongoose.model('User', {
+  title: String,
+  password: String
+})
 
 // Routes
 
@@ -84,8 +88,29 @@ app.delete('/api/tables/:table_id', function (req, res, next) {
 
   });
 });
+app.post('/api/sign', function (req, res) {
 
 
+  // create a table, information comes from request from Ionic
+  var newUser = new User(req.body);
+  newUser.save()
+    .then(item => {
+      console.log('User saved');
+    })
+    .catch(err => {
+      console.log('USer unable to save');
+    })
+  // get and return all the tables after you create another
+ User.find(function (err, users) {
+    if (err)
+      console.log('error Re loaded')
+    res.json(users);
+  });
+
+});
+app.get('/api/login', function (req, res, next) {
+  res.send('login');
+})
 // listen (start app with node server.js) ======================================
 app.listen(8080);
 console.log("App listening on port 8080");
