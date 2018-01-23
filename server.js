@@ -1,17 +1,30 @@
-// Set up
-var express = require('express');
-var app = express(); // create our app w/ express
-var mongoose = require('mongoose'); // mongoose for mongodb
-var morgan = require('morgan'); // log requests to the console (express4)
-var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
-var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
-var cors = require('cors');
-var util = require('util');
+const express = require('express');
+const app = express();
+const router = express.Router();
+const mongoose = require('mongoose'); 
+const morgan = require('morgan'); 
+const bodyParser = require('body-parser'); 
+const methodOverride = require('method-override');
+const cors = require('cors');
+const util = require('util');
+const path = require('path');
+
+const config = require('./server/config/database');
+
+const authentication = require('./server/routes/authentication')(router);
+
 
 // Configuration
-mongoose.connect('mongodb://localhost/tables-tactile');
+mongoose.Promise = global.Promise;
+mongoose.connect(config.uri, (err)=> {
+  if (err) {
+    console.log('could NOT connect to DATABASE: ', err);
+  } else {
+    console.log('Connected to DATABASE: ' + config.db)
+  }
+});
 
-app.use(morgan('dev')); // log every request to the console
+app.use(morgan('dev')); 
 app.use(bodyParser.urlencoded({
   'extended': 'true'
 })); // parse application/x-www-form-urlencoded
@@ -29,19 +42,13 @@ app.use(function (req, res, next) {
   next();
 });
 
-// Models
-var Table = mongoose.model('Table', {
-  title: String,
-  description: String,
-  rating: Number
-});
-var User = mongoose.model('User', {
-  title: String,
-  password: String
-})
 
+app.use(express.static('../www/'));
+app.use('/authentication', authentication);
 // Routes
-
+app.get("/*", (req, res) =>{
+res.send('<h1>OK</h1>');
+});
 // Get tables
 app.get('/api/tables', function (req, res) {
 
@@ -88,10 +95,8 @@ app.delete('/api/tables/:table_id', function (req, res, next) {
 
   });
 });
-app.post('/api/sign', function (req, res) {
 
-
-  // create a table, information comes from request from Ionic
+/*app.post('/api/sign', function (req, res) {
   var newUser = new User(req.body);
   newUser.save()
     .then(item => {
@@ -110,7 +115,7 @@ app.post('/api/sign', function (req, res) {
 });
 app.get('/api/login', function (req, res, next) {
   res.send('login');
-})
+})*/
 // listen (start app with node server.js) ======================================
 app.listen(8080);
 console.log("App listening on port 8080");

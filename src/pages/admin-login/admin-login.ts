@@ -26,27 +26,33 @@ import { TablesPage } from '../tables/tables';
 export class AdminLoginPage {
   title: any;
   password: any;
-  regData: { title: '', passssword: ''};
-  loginData = { title:'', password:''};
+  regData: { title: '', passssword: '' };
+  loginData = { title: '', password: '' };
 
-  private register: FormGroup;
-  constructor(public navCtrl: NavController, public navParams: NavParams,public viewController: ViewController, public modalCtrl: ModalController, private formBuilder: FormBuilder, private authService: AuthServiceProvider) {
-    this.register = this.formBuilder.group({
+  private newUser: FormGroup;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewController: ViewController, public modalCtrl: ModalController, private formBuilder: FormBuilder, private authService: AuthServiceProvider) {
+    this.newUser = this.formBuilder.group({
       title: ['', Validators.required],
       password: ['', Validators.required]
     })
 
   }
-  return() {
-    this.viewController.dismiss(RegisterPage);
-    let log = this.modalCtrl.create(LoginPage,{},{enableBackdropDismiss: false });
-    log.present();
-  }
-  login(){
+register() {
+this.viewController.dismiss(AdminLoginPage);
+let modal = this.modalCtrl.create(RegisterPage);
+modal.present();
+}
+
+  login() {
     this.authService.login(this.loginData), () => {
       this.navCtrl.setRoot(TablesPage);
-  
+
     }
+  }
+  return() {
+    this.viewController.dismiss(RegisterPage);
+    let log = this.modalCtrl.create(LoginPage, {}, { enableBackdropDismiss: false });
+    log.present();
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad AdminLoginPage');

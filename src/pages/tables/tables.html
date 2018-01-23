@@ -18,18 +18,16 @@
 
 
 <ion-content padding>
-  <ion-list no-lines>
+  <ion-list inset>
  
     <ion-item-sliding *ngFor="let table of tables">
  
       <ion-item>
  
         <ion-avatar item-left>
-          <img src="https://api.adorable.io/avatars/75/{{table?.title}}">
-        </ion-avatar>
-        <h2>{{table._id}}</h2>
- 
-        <h2>titre : {{table?.title}}</h2>
+            <ion-icon name="desktop"></ion-icon>
+        </ion-avatar> 
+        <h2>{{table?.title}}</h2>
         <p>{{table?.description}}</p>
  
  

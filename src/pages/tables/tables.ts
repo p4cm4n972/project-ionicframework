@@ -41,7 +41,6 @@ addTable() {
   modal.onDidDismiss( table => {
     if(table) {
       this.tables.push(table);
-      this.rest.createTable(table);
     }
   });
   modal.present();

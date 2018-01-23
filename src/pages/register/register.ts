@@ -6,6 +6,7 @@ import { RestProvider } from '../../providers/rest/rest';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 import { LoginPage } from '../login/login';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
+import { AdminLoginPage } from '../admin-login/admin-login';
 
 /**
  * Generated class for the RegisterPage page.
@@ -33,7 +34,7 @@ private register: FormGroup;
   }
   back() {
     this.viewController.dismiss(RegisterPage);
-    let log = this.modalCtrl.create(LoginPage,{},{enableBackdropDismiss: false });
+    let log = this.modalCtrl.create(AdminLoginPage,{},{enableBackdropDismiss: false });
     log.present();
   }
 

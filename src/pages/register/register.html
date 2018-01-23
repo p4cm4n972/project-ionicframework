@@ -8,6 +8,11 @@
 
   <ion-navbar transparent>
     <ion-title text-center>register</ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only color="royal" (click)="back()">
+      <ion-icon name="backspace"></ion-icon>
+        </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -48,6 +53,5 @@
     </ion-item>
     
     <button ion-button class="submit-btn" full type="submit" [disabled]="!register.valid">Save</button>
-    <button ion-button class="register-btn" block clear (click)="back()">Login</button>
   </form>
 </ion-content>
