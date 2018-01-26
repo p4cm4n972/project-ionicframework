@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 import { RestProvider } from '../../providers/rest/rest';
-import { RegisterPage } from '../register/register';
 import { ViewController } from 'ionic-angular/navigation/view-controller';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { TablesPage } from '../tables/tables';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { AdminLoginPage } from '../admin-login/admin-login';
 
 /**
@@ -23,7 +22,7 @@ import { AdminLoginPage } from '../admin-login/admin-login';
 })
 export class LoginPage {
 
-  public tables;
+  tables: any;
   public user;
   postStatus: any;
   loginData = { title:'', password:''};
@@ -32,7 +31,6 @@ export class LoginPage {
   title: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public rest: RestProvider, public viewController: ViewController, public authService: AuthServiceProvider, private formBuilder: FormBuilder) {
-    this.tables;
     this.user = this.formBuilder.group({
       title: ['', Validators.required]
     })
@@ -40,25 +38,24 @@ export class LoginPage {
   }
 
   ionViewDidLoad() {
-    this.getTable();
+   this.getTable();
 
   }
   getTable() {
-    this.rest.getTable()
-    .subscribe(tables => {
+    this.rest.getTable().subscribe(tables => {
       this.tables = tables;
+      console.log(tables)
     })
-   
  }
  openAdmin() {
-   this.viewController.dismiss(LoginPage);
+   //this.viewController.dismiss();
+   this.navCtrl.pop();
    let pop = this.modalCtrl.create(AdminLoginPage);
    pop.present();
  }
  doLogin() {
   this.authService.login(this.loginData), () => {
     this.navCtrl.setRoot(TablesPage);
-
   }
   
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { ViewController } from 'ionic-angular/navigation/view-controller';
 import { RegisterPage } from '../register/register';
 import { LoginPage } from '../login/login';
@@ -24,38 +24,44 @@ import { TablesPage } from '../tables/tables';
   templateUrl: 'admin-login.html',
 })
 export class AdminLoginPage {
-  title: any;
+  username: any;
   password: any;
-  regData: { title: '', passssword: '' };
-  loginData = { title: '', password: '' };
+  regData: { username: '', password: '' };
+  loginData = { username: '', password: '' };
 
-  private newUser: FormGroup;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewController: ViewController, public modalCtrl: ModalController, private formBuilder: FormBuilder, private authService: AuthServiceProvider) {
-    this.newUser = this.formBuilder.group({
-      title: ['', Validators.required],
+  private user: FormGroup;
+  constructor(public appCtrl: App, public navCtrl: NavController, public navParams: NavParams, public viewController: ViewController, public modalCtrl: ModalController, private formBuilder: FormBuilder, private authService: AuthServiceProvider) {
+    this.user = this.formBuilder.group({
+      username: ['', Validators.required],
       password: ['', Validators.required]
     })
 
   }
-register() {
-this.viewController.dismiss(AdminLoginPage);
-let modal = this.modalCtrl.create(RegisterPage);
-modal.present();
-}
-
-  login() {
-    this.authService.login(this.loginData), () => {
-      this.navCtrl.setRoot(TablesPage);
-
-    }
-  }
-  return() {
-    this.viewController.dismiss(RegisterPage);
-    let log = this.modalCtrl.create(LoginPage, {}, { enableBackdropDismiss: false });
-    log.present();
-  }
   ionViewDidLoad() {
     console.log('ionViewDidLoad AdminLoginPage');
   }
+  register() {
+    console.log('REGISTER');    
+    this.navCtrl.pop();
+    let modal = this.modalCtrl.create(RegisterPage);
+    modal.present();
+  }
+
+  login(user) {
+    console.log('LOGIN');
+    this.authService.login(this.user), (data) => {
+    }
+    console.log('end');
+    //this.viewController.dismiss(AdminLoginPage);  
+    this.navCtrl.pop();
+    this.navCtrl.push(TablesPage);
+  }
+  return() {
+    //this.viewController.dismiss(RegisterPage);
+    this.navCtrl.pop();
+    let log = this.modalCtrl.create(LoginPage, {}, { enableBackdropDismiss: false });
+    log.present();
+  }
+  
 
 }

@@ -1,20 +1,30 @@
 const express = require('express');
 const app = express();
 const router = express.Router();
-const mongoose = require('mongoose'); 
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
 const morgan = require('morgan'); 
 const bodyParser = require('body-parser'); 
 const methodOverride = require('method-override');
 const cors = require('cors');
 const util = require('util');
 const path = require('path');
-
+//CONFIG
 const config = require('./server/config/database');
 
 const authentication = require('./server/routes/authentication')(router);
+//MONGO DB
+ MongoClient.connect(config.uri, function( err, client) {
+  assert.equal(null, err);
+  console.log("Connected successfully to server");
+  const db = client.db(config.dbName);
+    client.close();
+});
 
+const Table = require('./server/models/tables');
 
-// Configuration
+/* Configuration MONGOOSE
+const mongoose = require('mongoose'); 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.uri, (err)=> {
   if (err) {
@@ -22,7 +32,7 @@ mongoose.connect(config.uri, (err)=> {
   } else {
     console.log('Connected to DATABASE: ' + config.db)
   }
-});
+});*/
 
 app.use(morgan('dev')); 
 app.use(bodyParser.urlencoded({
@@ -46,44 +56,52 @@ app.use(function (req, res, next) {
 app.use(express.static('../www/'));
 app.use('/authentication', authentication);
 // Routes
-app.get("/*", (req, res) =>{
+app.get("/", (req, res) =>{
 res.send('<h1>OK</h1>');
 });
 // Get tables
 app.get('/api/tables', function (req, res) {
+  MongoClient.connect(config.uri, function (err, client) {
+    assert.equal(null, err);
+    console.log("loading tables...");
+    const db = client.db(config.dbName);
 
-  console.log("fetching tables");
-
-  // use mongoose to get all tables in the database
-  Table.find(function (err, tables) {
-
-    // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-    if (err)
-      res.send(err)
-
-    res.json(tables);
+    fetchingTables(db, function() {
+        client.close()
+    });
   });
+    var fetchingTables = function (db, callback) {
+      const collection = db.collection('tables');
+      collection.find({}).toArray( function (err, tables) {
+        assert.equal( err, null);
+        res.json({tables : tables});
+      })
+    }
 });
 
 // create table and send back all tables after creation
 app.post('/api/tables', function (req, res) {
-
-
-  // create a table, information comes from request from Ionic
-  var newTable = new Table(req.body);
-  newTable.save()
-    .then(item => {
-      console.log('table saved');
-    })
-    .catch(err => {
-      console.log('unable to save');
-    })
-  // get and return all the tables after you create another
- Table.find(function (err, tables) {
-    if (err)
-      console.log('error Re loaded')
-    res.json(tables);
+MongoClient.connect(config.uri, function(err , client) {
+  assert.equal(null, err);
+  const db = client.db(config.dbName);
+  registerTable(db, function () {
+    client.close();
+  })
+})
+var registerTable = function (db, callback) {
+  var collection = db.collection('tables');
+  collection.insert({
+    title: req.body.title,
+    description: req.body.description
+  }, function (err, result) {
+    assert.equal(err, null);
+    console.log('Tables inserted into the collection');
   });
+  collection.find({}).toArray( function (err, tables) {
+    assert.equal(err, null);
+    res.json(tables);
+  })
+}
 
 });
 
@@ -96,26 +114,5 @@ app.delete('/api/tables/:table_id', function (req, res, next) {
   });
 });
 
-/*app.post('/api/sign', function (req, res) {
-  var newUser = new User(req.body);
-  newUser.save()
-    .then(item => {
-      console.log('User saved');
-    })
-    .catch(err => {
-      console.log('USer unable to save');
-    })
-  // get and return all the tables after you create another
- User.find(function (err, users) {
-    if (err)
-      console.log('error Re loaded')
-    res.json(users);
-  });
-
-});
-app.get('/api/login', function (req, res, next) {
-  res.send('login');
-})*/
-// listen (start app with node server.js) ======================================
 app.listen(8080);
 console.log("App listening on port 8080");

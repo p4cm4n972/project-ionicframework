@@ -18,7 +18,7 @@ import { AddtablePage } from '../addtable/addtable';
 })
 export class TablesPage {
 
-   tables: any;
+   tables: any[] = [];
    errorMessage: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public rest: RestProvider, public modalCtrl: ModalController) {
@@ -30,9 +30,7 @@ export class TablesPage {
   }
 getTable() {
    this.rest.getTable()
-   .subscribe(tables => {
-     this.tables = tables;
-   })
+   
   
 }
 addTable() {

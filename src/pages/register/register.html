@@ -14,38 +14,13 @@
         </button>
     </ion-buttons>
   </ion-navbar>
-
 </ion-header>
-
-<!--
-<ion-content padding>
-<form [formGroup] = "register" (ngSubmit)= "sign(register.value)">
-  <ion-row>
-    <ion-col>
-      <ion-list inset>
-        <ion-item>
-          <ion-label>Register</ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-input type="text" name="title" placeholder="name" formControlName="title"></ion-input>
-        </ion-item>
-      </ion-list>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col class="signup-col">
-      <button ion-button class="submit-btn" full type="submit" [disabled]="!register.valid">Save</button>
-      <button ion-button class="register-btn" block clear (click)="back()">Login</button>
-    </ion-col>
-  </ion-row>
-</form>
-</ion-content>-->
 <ion-content padding>
   <h2>Register Here</h2>
   <form [formGroup] = "register" (ngSubmit)="doSignup(register.value)">
     <ion-item>
       <ion-label stacked>Username</ion-label>
-      <ion-input formControlName="title" name="title" type="text" placeholder="Your username" ></ion-input>
+      <ion-input formControlName="username" name="username" type="text" placeholder="Your username" ></ion-input>
     </ion-item>
     <ion-item>
       <ion-label stacked>Password</ion-label>

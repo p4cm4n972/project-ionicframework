@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/observable/throw';
 
 export interface Table {
   title: string;
@@ -16,32 +18,31 @@ export interface Table {
 */
 @Injectable()
 export class RestProvider {
-  private apiUrl = 'http://localhost:8080/api/tables/';
+  private apiUrl = 'http://localhost:8080/api/tables';
+  tables: any;
 
-  constructor(public http: HttpClient) {
-    console.log('SERVICE RestProvider Provider');
-  }
-  getTable(): Observable<{}> {
-    return this.http.get(this.apiUrl).
-      catch(this.handleError);
+  constructor(public http: HttpClient) {}
+  
+  getTable()  {
+     return this.http.get(this.apiUrl)
   }
 
   createTable(table) {
     return this.http.post(this.apiUrl, table)
-    .subscribe()
+      .subscribe()
   }
 
 
   deleteTable(id) {
     return this.http.delete(this.apiUrl + id)
-    .subscribe((res) => {
-      console.log(res)
-    })
+      .subscribe((res) => {
+        console.log(res)
+      })
   }
 
   login(user) {
     return this.http.post('http://localhost/api/login', user)
-    .subscribe();
+      .subscribe();
   }
   private handleError(error: Response | any) {
     let errMsg: string;

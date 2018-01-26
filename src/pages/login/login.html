@@ -14,11 +14,11 @@
     <form [formGroup]="user" (ngSubmit)="doLogin(user.value)" >
       <ion-row>
         <ion-col>
-          <ion-list inset>
+          <ion-list inset >
             <ion-item>
               <ion-label>TABLES</ion-label>
               <ion-select formControlName="title" name="title">
-                <ion-option *ngFor='let table of tables' [value]="table.title" name='option'>{{table.title}}</ion-option>
+                <ion-option *ngFor='let table of tables, index as x' [value]="table.title" name='option'>{{table[x].title}}</ion-option>
               </ion-select>
             </ion-item>
           </ion-list>
